@@ -733,7 +733,8 @@ def make_property(prop, info, desc=""):
                 type_checks.append(typ)
                 continue
               typ = next(t
-                         for n, t in validators.SCHEMA_TYPE_MAPPING
+                         for n, t in (validators.SCHEMA_TYPE_MAPPING
+                                     +validators.USER_TYPE_MAPPING)
                          if typ['type'] == n)
               if typ is None:
                   typ = type(None)

@@ -15,6 +15,16 @@ SCHEMA_TYPE_MAPPING = (
 )
 """Sequence of schema type mappings to be checked in precedence order."""
 
+USER_TYPE_MAPPING = tuple()
+"""Sequence of schema type mappings for additional user types."""
+
+def set_user_type_mapping(user_type_mapping):
+    global USER_TYPE_MAPPING
+    assert isinstance(user_type_mapping, tuple)
+    for tm in user_type_mapping:
+        assert isinstance(tm,tuple)
+    USER_TYPE_MAPPING = user_type_mapping
+
 class ValidationError(Exception):
     pass
 
