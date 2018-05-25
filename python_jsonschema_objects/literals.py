@@ -29,6 +29,7 @@ class LiteralValue(object):
       :value: @todo
 
       """
+
       if isinstance(value, LiteralValue):
           self._value = value._value
       else:
@@ -43,7 +44,7 @@ class LiteralValue(object):
       return self.for_json()
 
   def for_json(self):
-      return self._value
+      return self._format()
 
   @classmethod
   def default(cls):
@@ -63,17 +64,25 @@ class LiteralValue(object):
   def __repr__(self):
       return "<Literal<%s> %s>" % (
           self._value.__class__.__name__,
-          str(self._value)
+          str(self)
       )
 
+  def _format(self):
+      info = self.propinfo('__literal__')
+      formatter  = validators.formatter_registry(info['type'])
+      return formatter(self, self._value, info) if formatter else self._value
+
   def __str__(self):
-      if isinstance(self._value, six.string_types):
-        return self._value
-      return str(self._value)
+      value = self._format()
+      if isinstance(value, six.string_types):
+        return value
+      return str(value)
 
   def validate(self):
       info = self.propinfo('__literal__')
-
+      converter  = validators.converter_registry(info['type'])
+      if converter:
+          self._value = converter(self, self._value, info)
       # TODO: this duplicates logic in validators.ArrayValidator.check_items; unify it.
       for param, paramval in sorted(six.iteritems(info),
                                     key=lambda x: x[0].lower() != 'type'):

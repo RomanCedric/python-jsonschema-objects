@@ -167,3 +167,30 @@ def check_type(param, value, type_data):
     type_check(param, value, type_data)
 
 
+converter_registry = ValidatorRegistry()
+
+@converter_registry.register(name='boolean')
+def convert_boolean(param, value, _):
+    if isinstance(value, six.string_types):
+        vl = value.lower()
+        if vl in ['true', 'yes', 'ok']:
+            return True
+        if vl in ['false', 'no', 'wrong']:
+            return False
+    return value
+
+
+formatter_registry = ValidatorRegistry()
+
+@formatter_registry.register(name='number')
+def format_number(param, value, details):
+    if 'format' in details:
+        frmt = details['format']
+        try:
+            if '{' in frmt:
+                return frmt.format(value)
+            if '%' in frmt:
+                return frmt % value
+        except ValueError as er:
+            pass
+    return value
