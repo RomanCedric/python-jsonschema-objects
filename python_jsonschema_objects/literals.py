@@ -45,6 +45,10 @@ class LiteralValue(object):
   def for_json(self):
       return self._value
 
+  @property
+  def value(self):
+      return self._value
+
   @classmethod
   def default(cls):
       return cls.__propinfo__.get('__default__')
