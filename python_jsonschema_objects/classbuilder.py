@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import python_jsonschema_objects.util as util
 import python_jsonschema_objects.validators as validators
 import python_jsonschema_objects.pattern_properties as pattern_properties
