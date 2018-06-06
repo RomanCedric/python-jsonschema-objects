@@ -168,6 +168,8 @@ class ProtocolBase(collections.MutableMapping):
                 logger.debug(util.lazy_format("Initializing '{0}' to '{1}'",
                                               name, default_value))
                 setattr(self, name, default_value)
+                if hasattr(self._properties[name], 'validate_items'):
+                    self._properties[name].validate_items()
 
         for prop in props:
             try:
