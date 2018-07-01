@@ -35,11 +35,14 @@ class LiteralValue(object):
 
       if isinstance(value, LiteralValue):
           self._value = value._value
+          self._validated = getattr(value, '_validated', False)
       else:
           self._value = value
+          self._validated = False
 
       if self._value is None and self.default() is not None:
           self._value = self.default()
+          self._validated = True
 
       if validators.converter_registry.registry:
           info = self.propinfo('__literal__')
@@ -100,6 +103,8 @@ class LiteralValue(object):
       return str(self._value)
 
   def validate(self):
+      if self._validated:
+          return
       info = self.propinfo('__literal__')
       # TODO: this duplicates logic in validators.ArrayValidator.check_items; unify it.
       for param, paramval in sorted(six.iteritems(info),
@@ -107,6 +112,7 @@ class LiteralValue(object):
           validator = validators.registry(param)
           if validator is not None:
               validator(paramval, self._value, info)
+      self._validated = True
 
   def __eq__(self, other):
       return self._value == other

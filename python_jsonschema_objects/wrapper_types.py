@@ -26,7 +26,7 @@ class ArrayWrapper(collections.MutableSequence):
     def insert(self, index, value):
         self.data.insert(index, value)
         self._dirty = True
-
+ 
     def __setitem__(self, index, value):
         self.data[index] = value
         self._dirty = True
@@ -132,6 +132,8 @@ class ArrayWrapper(collections.MutableSequence):
 
         if self.__itemtype__ is None:
             return
+        if len(self.data)==0:
+            return self.data
 
         type_checks = self.__itemtype__
         if not isinstance(type_checks, (tuple, list)):

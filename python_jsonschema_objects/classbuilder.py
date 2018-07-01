@@ -281,8 +281,6 @@ class ProtocolBase(collections.MutableMapping):
             elif isinstance(val, python_jsonschema_objects.
                             wrapper_types.ArrayWrapper):
                 val.validate()
-                #for subval in val:
-                #  subval.validate()
             else:
                 # This object is of the wrong type, but just try setting it
                 # The property setter will enforce its correctness
