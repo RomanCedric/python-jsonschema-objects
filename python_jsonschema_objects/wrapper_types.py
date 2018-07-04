@@ -41,14 +41,12 @@ class ArrayWrapper(collections.MutableSequence):
             return self.for_json() == other
 
     def __init__(self, ary):
+        self._dirty = True
+        self._typed = None
         if isinstance(ary, (list, tuple, collections.Sequence)):
             self.data = ary
-            self._dirty = True
-            self._typed = None
         elif isinstance(ary, ArrayWrapper):
             self.data = ary.data
-            self._dirty = True
-            self._typed = None
         else:
             raise TypeError("Invalid value given to array validator: {0}"
                             .format(ary))
@@ -56,8 +54,7 @@ class ArrayWrapper(collections.MutableSequence):
     @property
     def typed_elems(self):
         if self._typed is None or self._dirty is True:
-            self._typed = self.validate_items()
-            self._dirty = False
+            self.validate_items()
 
         return self._typed
 
@@ -132,8 +129,8 @@ class ArrayWrapper(collections.MutableSequence):
 
         if self.__itemtype__ is None:
             return
-        if len(self.data)==0:
-            return self.data
+        if not self._dirty:
+            return
 
         type_checks = self.__itemtype__
         if not isinstance(type_checks, (tuple, list)):
@@ -190,7 +187,8 @@ class ArrayWrapper(collections.MutableSequence):
                     val.validate()
                     typed_elems.append(val)
 
-        return typed_elems
+        self._typed = typed_elems
+        self._dirty = False
 
     @staticmethod
     def create(name, item_constraint=None, **addl_constraints):
