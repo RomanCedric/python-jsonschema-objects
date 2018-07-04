@@ -231,8 +231,8 @@ def as_namespace(obj, names=None):
     return Namespace.from_object(obj, names)
 
 
-def get_unicode(strOrUnicode, encoding='utf-8'):
+def get_unicode(str_or_unicode, encoding='utf-8'):
     import sys
-    if isinstance(strOrUnicode, six.text_type):
-        return strOrUnicode
-    return six.text_type(strOrUnicode, encoding, errors='ignore')
+    if isinstance(str_or_unicode, six.text_type):
+        return str_or_unicode
+    return six.text_type(str_or_unicode, encoding, errors='ignore')

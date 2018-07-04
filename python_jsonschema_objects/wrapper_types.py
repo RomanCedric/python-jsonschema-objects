@@ -97,6 +97,8 @@ class ArrayWrapper(collections.MutableSequence):
         return out
 
     def validate(self):
+        if not self._dirty:
+            return True
         self.validate_items()
         self.validate_length()
         self.validate_uniqueness()

@@ -276,6 +276,7 @@ class ProtocolBase(collections.MutableMapping):
 
             if isinstance(val, ProtocolBase):
                 val.validate()
+                self.logger.warning('%s validating %s', self.__class__.__name__, val)
             elif getattr(val, 'isLiteralClass', None) is True:
                 val.validate()
             elif isinstance(val, python_jsonschema_objects.
