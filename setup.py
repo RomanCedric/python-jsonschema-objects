@@ -96,6 +96,3 @@ if __name__ == '__main__':
           ]
 
           )
-
-import subprocess
-subprocess.check_call(['pip', 'install', '-q', 'git+https://github.com/Julian/jsonschema.git@draft7'])
